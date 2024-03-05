@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Country\CreateCountryRequest;
 use App\Http\Requests\Country\UpdateCountryRequest;
+use App\Jobs\TriggerWebhookJob;
 use App\Models\Country;
+use App\Models\Log;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
@@ -52,5 +54,14 @@ class CountryController extends Controller
     {
         $country->delete();
         return $this->respondNoContent();
+    }
+
+    public function webhook()
+    {
+        Log::chunk(100, function ($logs) {
+            $logs->each(function ($log) {
+                TriggerWebhookJob::dispatch($log);
+            });
+        });
     }
 }
