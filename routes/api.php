@@ -17,6 +17,14 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
-Route::apiResource('countries' , CountryController::class);
+Route::apiResource('countries', CountryController::class);
 
-Route::post('/webhook', [CountryController::class, 'webhook']);
+Route::controller(CountryController::class)
+    ->prefix('countries')
+    ->name('countries.')
+    ->group(function () {
+        Route::post('soap', 'run_service')->middleware('auth:api');
+        Route::post('webhook', 'webhook');
+        Route::post('invokeSoapMethod', 'invokeSoapMethod');
+
+    });

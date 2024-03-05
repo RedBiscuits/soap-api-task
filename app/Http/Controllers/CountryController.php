@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Country\CreateCountryRequest;
 use App\Http\Requests\Country\UpdateCountryRequest;
+use App\Http\Services\CountrySoapService;
 use App\Jobs\TriggerWebhookJob;
 use App\Models\Country;
 use App\Models\Log;
 use Illuminate\Http\Request;
+use SoapClient;
+use SoapFault;
 
 class CountryController extends Controller
 {
@@ -63,5 +66,44 @@ class CountryController extends Controller
                 TriggerWebhookJob::dispatch($log);
             });
         });
+    }
+
+    public function run_service()
+    {
+        $service = new CountrySoapService();
+        $response = $service->run();
+
+        return response($response, 200)->header('Content-Type', 'text/xml');
+    }
+
+    public function invokeSoapMethod(Request $request)
+    {
+        ini_set('max_execution_time', 3000);
+
+        // Define the SOAP server URL
+        $serverUrl = 'http://localhost:8000/api/countries/soap';
+
+        // Define the SOAP request parameters
+        $requestParams = array(
+            'callback_url' => 'http://example.com/callback'
+        );
+
+        try {
+            // Create a new SoapClient instance
+            $client = new SoapClient(null, array(
+                'location' => $serverUrl,
+                'uri' => 'urn:countryService',
+                'trace' => 1
+            ));
+
+            // Call the getCountries method with the parameters
+            $response = $client->__soapCall('getCountries', array($requestParams));
+
+            // Output the response
+            var_dump($response);
+        } catch (SoapFault $fault) {
+            // Handle SOAP faults
+            echo "Error: " . $fault->getMessage();
+        }
     }
 }
