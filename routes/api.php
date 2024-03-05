@@ -20,3 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('countries' , CountryController::class);
+
+Route::post('login', 'AuthController@login');
+Route::post('register', 'AuthController@register');
+
+// protected routes
+Route::middleware('auth:api')->group(function () {
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
+    // Other authenticated routes...
+});
