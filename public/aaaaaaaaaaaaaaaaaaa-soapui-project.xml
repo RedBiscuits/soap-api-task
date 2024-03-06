@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="0856e667-ca67-48ae-89b5-c156138b4777" activeEnvironment="Default" name="aaaaaaaaaaaaaaaaaaa" resourceRoot="" soapui-version="5.7.2" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
+<con:soapui-project id="0856e667-ca67-48ae-89b5-c156138b4777" activeEnvironment="Default" name="aaaaaaaaaaaaaaaaaaa" resourceRoot="${projectDir}" soapui-version="5.7.2" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
